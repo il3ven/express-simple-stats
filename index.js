@@ -18,14 +18,24 @@ db.serialize(function () {
   );
 });
 
-function getRoute(req) {
+const getRoute = (req) => {
   const route = req.route ? req.route.path : ""; // check if the handler exist
   const baseUrl = req.baseUrl ? req.baseUrl : ""; // adding the base url if the handler is a child of another handler
 
   return route ? `${baseUrl === "/" ? "" : baseUrl}${route}` : "unknown route";
-}
+};
 
-const analytics = (req, res, next) => {
+const getDataAsJSON = () => {
+  return new Promise((resolve, reject) => {
+    db.all(`SELECT * FROM api_db`, (err, rows) => {
+      if (err) reject("Error in fetching data from DB", err);
+
+      resolve(rows);
+    });
+  });
+};
+
+const middleware = (req, res, next) => {
   res.on("finish", () => {
     console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
 
@@ -48,4 +58,7 @@ const analytics = (req, res, next) => {
   next();
 };
 
-module.exports = analytics;
+module.exports = {
+  middleware,
+  getDataAsJSON,
+};
