@@ -1,5 +1,5 @@
 {
-  "name": "express-simple-analytics",
+  "name": "express-simple-stats",
   "version": "1.0.0",
   "description": "Count API requests and status codes",
   "main": "index.js",
