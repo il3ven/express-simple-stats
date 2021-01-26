@@ -9,9 +9,7 @@
   "author": "il3ven",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "sqlite3": "^5.0.1"
-  },
-  "devDependencies": {
-    "express": "^4.17.1"
   }
 }

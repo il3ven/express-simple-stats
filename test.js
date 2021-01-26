@@ -1,16 +1,16 @@
-const app = require("express")();
-const analytics = require("./index");
+const express = require("express");
+const stats = require("./index");
 
-app.get("/stats", async (req, res) => {
-  const ret = await analytics.getDataAsJSON();
+const app = express();
 
-  res.json(ret);
-})
-
-app.use(analytics.middleware);
+stats.init("password");
+app.use("/stats", stats.router);
+app.use(stats.middleware);
 
 app.get("/", (req, res) => {
   res.send("Hello world");
 })
 
-app.listen(5000);
+app.listen(5000, () => {
+  console.log("Listening");
+});

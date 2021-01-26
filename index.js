@@ -1,22 +1,20 @@
-var sqlite3 = require("sqlite3").verbose();
-var db = new sqlite3.Database("./api_db.db");
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./api_db.db");
 
 function err_cb(err) {
   if (err) console.log(err);
 }
 
-db.serialize(function () {
-  db.run(
-    `CREATE TABLE IF NOT EXISTS api_db (
+db.run(
+  `CREATE TABLE IF NOT EXISTS api_db (
     type TEXT NOT NULL,
     route TEXT NOT NULL,
     status INTEGER NOT NULL,
     count INTEGER NOT NULL,
     PRIMARY KEY(type, route, status)
   )`,
-    err_cb
-  );
-});
+  err_cb
+);
 
 const getRoute = (req) => {
   const route = req.route ? req.route.path : ""; // check if the handler exist
@@ -35,6 +33,28 @@ const getDataAsJSON = () => {
   });
 };
 
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+
+router.post("/", async (req, res) => {
+  if (pwd.length < 1) res.status(500).send("Initialization not done properly");
+
+  if (req.body.pwd && req.body.pwd === pwd) {
+    const ret = await getDataAsJSON();
+
+    res.json(ret);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+var pwd = "";
+
+const init = (pass) => {
+  pwd = pass;
+};
+
 const middleware = (req, res, next) => {
   res.on("finish", () => {
     console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
@@ -42,7 +62,7 @@ const middleware = (req, res, next) => {
     db.serialize(() => {
       db.run(
         `INSERT INTO api_db VALUES ($type, $route, $status, 1) ON CONFLICT(type, route, status)
-        DO UPDATE SET count = count + 1`,
+          DO UPDATE SET count = count + 1`,
         { $type: req.method, $route: getRoute(req), $status: res.statusCode },
         err_cb
       );
@@ -58,7 +78,4 @@ const middleware = (req, res, next) => {
   next();
 };
 
-module.exports = {
-  middleware,
-  getDataAsJSON,
-};
+module.exports = { init, middleware, router };
