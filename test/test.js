@@ -1,5 +1,5 @@
 const express = require("express");
-const stats = require("./index");
+const stats = require("../index");
 
 const app = express();
 
