@@ -58,7 +58,7 @@ curl --location --request POST 'http://localhost:5000/stats/' \
 import * as express from "express";
 const app = express();
 
-import Stats from "express-simple-stats";
+import { Stats } from "express-simple-stats";
 
 /* A passowrd is provided while intializing the library. 
  * It will be used to authenticate request to get data.

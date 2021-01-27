@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.Stats = void 0;
 var sqlite3_1 = require("sqlite3");
 var db = new sqlite3_1.Database("./api_db.db");
@@ -108,4 +108,3 @@ function Stats(pass, opt) {
 }
 exports.Stats = Stats;
 ;
-//# sourceMappingURL=index.js.map

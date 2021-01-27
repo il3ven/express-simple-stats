@@ -1,5 +1,5 @@
 import * as express from "express";
-import Stats from "../dist/index";
+import { Stats } from "../src/index";
 
 const stats = Stats("password");
 

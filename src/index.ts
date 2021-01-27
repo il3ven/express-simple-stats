@@ -20,7 +20,7 @@ export interface ExpressStats {
   getDataAsJSON: () => Promise<unknown>;
 }
 
-export default function (pass: String, opt?: { freshDB: Boolean }): ExpressStats {
+export function Stats (pass: String, opt?: { freshDB: Boolean }): ExpressStats {
   if (!pass || pass.length < 1) throw new Error("Passowrd is required");
 
   let pwd = pass;

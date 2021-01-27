@@ -4,6 +4,6 @@ export interface ExpressStats {
     router: express.Router;
     getDataAsJSON: () => Promise<unknown>;
 }
-export default function (pass: String, opt?: {
+export declare function Stats(pass: String, opt?: {
     freshDB: Boolean;
 }): ExpressStats;
