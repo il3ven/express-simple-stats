@@ -1,7 +1,7 @@
-const sqlite3 = require("sqlite3").verbose();
+import sqlite3 from "sqlite3";
 const db = new sqlite3.Database("./api_db.db");
 
-const express = require("express");
+import * as express from "express";
 
 function err_cb(err) {
   if (err) console.log(err);
@@ -14,7 +14,13 @@ const getRoute = (req) => {
   return route ? `${baseUrl === "/" ? "" : baseUrl}${route}` : "unknown route";
 };
 
-module.exports = (pass, opt = {}) => {
+export interface ExpressStats {
+  middleware: (req: express.Request, res: express.Response, next: express.NextFunction) => void;
+  router: express.Router;
+  getDataAsJSON: () => Promise<unknown>;
+}
+
+export default function (pass: String, opt?: { freshDB: Boolean }): ExpressStats {
   if (!pass || pass.length < 1) throw new Error("Passowrd is required");
 
   let pwd = pass;
@@ -40,14 +46,14 @@ module.exports = (pass, opt = {}) => {
   const getDataAsJSON = () => {
     return new Promise((resolve, reject) => {
       db.all(`SELECT * FROM api_db`, (err, rows) => {
-        if (err) reject("Error in fetching data from DB", err);
+        if (err) reject(err);
 
         resolve(rows);
       });
     });
   };
 
-  router.post("/", async (req, res) => {
+  router.post("/", async (req: express.Request, res: express.Response) => {
     if (pwd.length < 1)
       res.status(500).send("Initialization not done properly");
 
@@ -60,7 +66,7 @@ module.exports = (pass, opt = {}) => {
     }
   });
 
-  const middleware = (req, res, next) => {
+  const middleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.on("finish", () => {
       console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
 
