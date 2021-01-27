@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var sqlite3_1 = require("sqlite3");
-var db = new sqlite3_1.default.Database("./api_db.db");
+var db = new sqlite3_1.Database("./api_db.db");
 var express = require("express");
 function err_cb(err) {
     if (err)
@@ -54,7 +54,7 @@ function default_1(pass, opt) {
         throw new Error("Passowrd is required");
     var pwd = pass;
     db.serialize(function () {
-        if (opt.freshDB)
+        if (opt && opt.freshDB)
             db.run("DROP TABLE IF EXISTS api_db", err_cb);
         db.run("CREATE TABLE IF NOT EXISTS api_db (\n      type TEXT NOT NULL,\n      route TEXT NOT NULL,\n      status INTEGER NOT NULL,\n      count INTEGER NOT NULL,\n      PRIMARY KEY(type, route, status)\n    )", err_cb);
     });

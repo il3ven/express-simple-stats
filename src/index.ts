@@ -1,5 +1,5 @@
-import sqlite3 from "sqlite3";
-const db = new sqlite3.Database("./api_db.db");
+import { Database } from "sqlite3";
+const db = new Database("./api_db.db");
 
 import * as express from "express";
 
@@ -26,7 +26,7 @@ export default function (pass: String, opt?: { freshDB: Boolean }): ExpressStats
   let pwd = pass;
 
   db.serialize(() => {
-    if (opt.freshDB) db.run("DROP TABLE IF EXISTS api_db", err_cb);
+    if (opt && opt.freshDB) db.run("DROP TABLE IF EXISTS api_db", err_cb);
 
     db.run(
       `CREATE TABLE IF NOT EXISTS api_db (
