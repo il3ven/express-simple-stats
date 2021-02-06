@@ -7,7 +7,9 @@ function err_cb(err) {
   if (err) console.log(err);
 }
 
-const getRoute = (req) => {
+const getRoute = (req: express.Request) => {
+  if (req.originalUrl === "/") return "/";
+
   const route = req.route ? req.route.path : ""; // check if the handler exist
   const baseUrl = req.baseUrl ? req.baseUrl : ""; // adding the base url if the handler is a child of another handler
 
@@ -20,7 +22,7 @@ export interface ExpressStats {
   getDataAsJSON: () => Promise<unknown>;
 }
 
-export function Stats (pass: String, opt?: { freshDB: Boolean }): ExpressStats {
+export function Stats(pass: String, opt?: { freshDB: Boolean }): ExpressStats {
   if (!pass || pass.length < 1) throw new Error("Passowrd is required");
 
   let pwd = pass;
@@ -77,12 +79,6 @@ export function Stats (pass: String, opt?: { freshDB: Boolean }): ExpressStats {
           { $type: req.method, $route: getRoute(req), $status: res.statusCode },
           err_cb
         );
-
-        db.each("SELECT * FROM api_db", (err, row) => {
-          if (err) console.log(err);
-
-          console.log(row);
-        });
       });
     });
 

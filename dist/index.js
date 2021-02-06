@@ -45,6 +45,8 @@ function err_cb(err) {
         console.log(err);
 }
 var getRoute = function (req) {
+    if (req.originalUrl === "/")
+        return "/";
     var route = req.route ? req.route.path : ""; // check if the handler exist
     var baseUrl = req.baseUrl ? req.baseUrl : ""; // adding the base url if the handler is a child of another handler
     return route ? "" + (baseUrl === "/" ? "" : baseUrl) + route : "unknown route";
@@ -95,11 +97,6 @@ function Stats(pass, opt) {
             console.log(req.method + " " + getRoute(req) + " " + res.statusCode);
             db.serialize(function () {
                 db.run("INSERT INTO api_db VALUES ($type, $route, $status, 1) ON CONFLICT(type, route, status)\n            DO UPDATE SET count = count + 1", { $type: req.method, $route: getRoute(req), $status: res.statusCode }, err_cb);
-                db.each("SELECT * FROM api_db", function (err, row) {
-                    if (err)
-                        console.log(err);
-                    console.log(row);
-                });
             });
         });
         next();
