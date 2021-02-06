@@ -94,7 +94,7 @@ function Stats(pass, opt) {
     }); });
     var middleware = function (req, res, next) {
         res.on("finish", function () {
-            console.log(req.method + " " + getRoute(req) + " " + res.statusCode);
+            // console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
             db.serialize(function () {
                 db.run("INSERT INTO api_db VALUES ($type, $route, $status, 1) ON CONFLICT(type, route, status)\n            DO UPDATE SET count = count + 1", { $type: req.method, $route: getRoute(req), $status: res.statusCode }, err_cb);
             });
