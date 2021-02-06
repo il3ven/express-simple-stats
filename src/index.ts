@@ -70,7 +70,7 @@ export function Stats(pass: String, opt?: { freshDB: Boolean }): ExpressStats {
 
   const middleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.on("finish", () => {
-      console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
+      // console.log(`${req.method} ${getRoute(req)} ${res.statusCode}`);
 
       db.serialize(() => {
         db.run(
