@@ -8,6 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
+  "keywords": [
+    "express",
+    "analytics",
+    "count-requests",
+    "middleware"
+  ],
   "author": "il3ven",
   "license": "ISC",
   "dependencies": {
